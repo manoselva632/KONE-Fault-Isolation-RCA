@@ -1,0 +1,22 @@
+{
+  "project": "KONE SentinIQ - Autonomous Fault Isolation & Root Cause Analysis",
+  "generatedAt": "2026-10-31T05:31:37.328Z",
+  "equipmentId": "KONE-MONOSPACE-700DX-CAR04",
+  "activeScenario": "SYSTEM NOMINAL / ALL OK",
+  "telemetrySnapshot": {
+    "motorTemp": 48.2,
+    "vibe": 0.08,
+    "doorCurrent": 1.45,
+    "busVoltage": 565,
+    "safetyLoop": "CLOSED (OK)",
+    "levelOffset": 1.1
+  },
+  "isolatedRootCause": "NONE (NOMINAL)",
+  "topologicalSymptomsPruned": [],
+  "tokenEfficiency": {
+    "budgetUsed": 12,
+    "tokenSavingsVsVerboseLogs": "89.2% reduction"
+  },
+  "rcaDecomposition": [],
+  "prescriptiveFieldAction": "No maintenance required."
+}

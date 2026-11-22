@@ -1,0 +1,140 @@
+{
+  "components": [
+    {
+      "id": "traction_motor",
+      "name": "Traction Motor",
+      "source": "live",
+      "reading_key": "temperature",
+      "unit": "C",
+      "normal_range": "Below 35 C",
+      "normal_reading": 31,
+      "description": "Machine-room motor temperature is monitored as a prototype indicator."
+    },
+    {
+      "id": "motor_brake",
+      "name": "Motor Brake",
+      "source": "simulated",
+      "reading_key": "feedback",
+      "unit": "state",
+      "normal_range": "Engaged at rest; feedback matches command",
+      "normal_reading": "Engaged",
+      "description": "Illustrative brake feedback state."
+    },
+    {
+      "id": "door_motor",
+      "name": "Door Motor",
+      "source": "simulated",
+      "reading_key": "current",
+      "unit": "A",
+      "normal_range": "0.2-1.2 A",
+      "normal_reading": 0.6,
+      "description": "Illustrative door-operator current."
+    },
+    {
+      "id": "door_sensor",
+      "name": "Door Sensor",
+      "source": "live",
+      "reading_key": "blocked_seconds",
+      "unit": "s",
+      "normal_range": "Clear; blocked < 5 s",
+      "normal_reading": "CLEAR",
+      "description": "IR obstruction input and duration reported by the ESP32."
+    },
+    {
+      "id": "limit_switch",
+      "name": "Limit Switch",
+      "source": "simulated",
+      "reading_key": "state",
+      "unit": "state",
+      "normal_range": "Position indication agrees with travel",
+      "normal_reading": "Consistent",
+      "description": "Illustrative travel-limit indication."
+    },
+    {
+      "id": "position_sensor",
+      "name": "Position Sensor",
+      "source": "live",
+      "reading_key": "distance",
+      "unit": "cm",
+      "normal_range": "Above 30 cm",
+      "normal_reading": 120,
+      "description": "Ultrasonic car-top clearance reading from the ESP32."
+    },
+    {
+      "id": "overload_sensor",
+      "name": "Overload Sensor",
+      "source": "simulated",
+      "reading_key": "load",
+      "unit": "%",
+      "normal_range": "Below 80%",
+      "normal_reading": 42,
+      "description": "Illustrative load percentage; not a calibrated measurement."
+    },
+    {
+      "id": "safety_relay",
+      "name": "Safety Relay",
+      "source": "simulated",
+      "reading_key": "feedback",
+      "unit": "state",
+      "normal_range": "Closed; feedback matches command",
+      "normal_reading": "Closed",
+      "description": "Illustrative safety-relay feedback state."
+    },
+    {
+      "id": "power_supply",
+      "name": "Power Supply",
+      "source": "simulated",
+      "reading_key": "voltage",
+      "unit": "V",
+      "normal_range": "22-26 V",
+      "normal_reading": 24.1,
+      "description": "Illustrative supply voltage. Live humidity is supporting evidence only."
+    },
+    {
+      "id": "elevator_controller",
+      "name": "Elevator Controller",
+      "source": "simulated",
+      "reading_key": "communication",
+      "unit": "state",
+      "normal_range": "Communication OK",
+      "normal_reading": "OK",
+      "description": "Illustrative controller communication. Live humidity is supporting evidence only."
+    }
+  ],
+  "thresholds": {
+    "door_blocked_seconds": {
+      "warning_min": 5,
+      "critical_min": 10
+    },
+    "position_clearance_cm": {
+      "warning_max": 30,
+      "critical_max": 10,
+      "no_echo": -1
+    },
+    "machine_room_temperature_c": {
+      "warning_min": 35,
+      "critical_min": 40
+    },
+    "machine_room_humidity_percent": {
+      "warning_min": 70,
+      "critical_min": 85
+    }
+  },
+  "simulation_defaults": {
+    "traction_motor": 31,
+    "motor_brake": "Engaged",
+    "door_motor": 0.6,
+    "door_sensor": {
+      "ir": 0,
+      "blocked_seconds": 0,
+      "count": 0
+    },
+    "limit_switch": "Consistent",
+    "position_sensor": 120,
+    "overload_sensor": 42,
+    "safety_relay": "Closed",
+    "power_supply": 24.1,
+    "elevator_controller": "OK",
+    "humidity": 48
+  }
+}

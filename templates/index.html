@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111c">
+  <title>Elevator RCA | Monitoring Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="Elevator RCA home">
+        <span class="brand-mark">ER</span>
+        <span><strong>Elevator RCA</strong><small>MONITORING CONSOLE</small></span>
+      </a>
+      <div class="side-label">WORKSPACE</div>
+      <nav class="navigation" aria-label="Main navigation">
+        <button class="nav-link active" data-view="dashboard"><span class="nav-icon">▦</span>Dashboard</button>
+        <button class="nav-link" data-view="simulation"><span class="nav-icon">↕</span>Elevator Simulation</button>
+        <button class="nav-link" data-view="components"><span class="nav-icon">◈</span>Component Monitoring</button>
+        <button class="nav-link" data-view="injection"><span class="nav-icon">⊕</span>Fault Injection</button>
+        <button class="nav-link" data-view="reports"><span class="nav-icon">▤</span>Root Cause Analysis</button>
+        <button class="nav-link" data-view="chatbot"><span class="nav-icon">✳</span>AI Technician Chatbot</button>
+        <button class="nav-link" data-view="history"><span class="nav-icon">◷</span>Fault History</button>
+        <a class="nav-link" href="/sentiniq" target="_blank" style="text-decoration:none; display:flex; align-items:center;"><span class="nav-icon">🚀</span>SentinIQ Digital Twin ↗</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="prototype-note">
+          <span class="note-icon">!</span>
+          <div><strong>Prototype only</strong><p>Never connect to elevator operating or safety circuits.</p></div>
+        </div>
+        <div class="sidebar-version"><span class="pulse-dot"></span> LOCAL DIAGNOSTICS <span>v1.0</span></div>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <div class="page-heading">
+          <div class="eyebrow">MAINTENANCE INTELLIGENCE</div>
+          <h1 id="page-title">System overview</h1>
+        </div>
+        <div class="topbar-actions">
+          <label class="mode-control">
+            <span>DATA MODE</span>
+            <select id="mode-select" aria-label="Data source mode">
+              <option value="hybrid">LIVE + SIM</option>
+              <option value="simulation">SIMULATION ONLY</option>
+            </select>
+          </label>
+          <div id="connection-badge" class="connection-badge disconnected"><span class="status-dot"></span><span id="connection-text">ESP32 DISCONNECTED</span></div>
+          <div id="mode-badge" class="mode-badge">LIVE + SIM</div>
+        </div>
+      </header>
+
+      <main class="content">
+        <section class="view-panel active" id="view-dashboard">
+          <div class="section-intro">
+            <div><div class="eyebrow">LIVE SYSTEM SNAPSHOT</div><h2>Operational overview</h2><p>Sensor values are re-evaluated by the Flask diagnosis engine.</p></div>
+            <div class="refresh-meta"><span class="pulse-dot"></span> Polling every 500 ms <span id="last-updated">Waiting for data</span></div>
+          </div>
+          <div class="metric-grid">
+            <article class="metric-card"><span class="metric-label">COMPONENTS</span><strong id="metric-total">10</strong><span class="metric-caption">Monitored</span><span class="metric-glyph">◈</span></article>
+            <article class="metric-card metric-normal"><span class="metric-label">NORMAL</span><strong id="metric-normal">—</strong><span class="metric-caption">Within range</span><span class="metric-glyph">✓</span></article>
+            <article class="metric-card metric-warning"><span class="metric-label">WARNINGS</span><strong id="metric-warning">—</strong><span class="metric-caption">Review recommended</span><span class="metric-glyph">!</span></article>
+            <article class="metric-card metric-fault"><span class="metric-label">FAULTY</span><strong id="metric-fault">—</strong><span class="metric-caption">Active findings</span><span class="metric-glyph">⌁</span></article>
+            <article class="metric-card metric-active"><span class="metric-label">ACTIVE FAULTS</span><strong id="metric-active">0</strong><span class="metric-caption">Report episodes</span><span class="metric-glyph">◷</span></article>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="panel elevator-panel">
+              <div class="panel-heading"><div><div class="eyebrow">SIMULATION</div><h3>Elevator status</h3></div><span class="simulation-tag">NO REAL CONTROL</span></div>
+              <div class="elevator-layout">
+                <div class="shaft-wrap">
+                  <div class="shaft">
+                    <div class="floor-line floor-5"><span>5</span></div><div class="floor-line floor-4"><span>4</span></div>
+                    <div class="floor-line floor-3"><span>3</span></div><div class="floor-line floor-2"><span>2</span></div>
+                    <div class="floor-line floor-1"><span>1</span></div><div class="floor-line floor-0"><span>G</span></div>
+                    <div id="elevator-car" class="elevator-car"><div class="car-door left"></div><div class="car-door right"></div><span class="car-floor" id="car-floor">G</span></div>
+                  </div>
+                  <div class="clearance-meter"><span class="meter-label">CAR TOP<br>CLEARANCE</span><div class="meter-track"><div id="clearance-fill" class="meter-fill"></div></div><strong id="clearance-value">— cm</strong></div>
+                </div>
+                <div class="elevator-controls">
+                  <span class="eyebrow">CURRENT FLOOR</span><strong class="floor-number" id="current-floor">Ground</strong>
+                  <div id="movement-status" class="movement-status">Idle</div>
+                  <div class="control-row"><button class="control-button" data-move="up">↑ UP</button><button class="control-button" data-move="down">↓ DOWN</button></div>
+                  <div class="floor-select-label">SELECT FLOOR</div>
+                  <div class="floor-buttons" id="floor-buttons">
+                    <button data-floor="0" aria-label="Ground floor">G</button><button data-floor="1">1</button><button data-floor="2">2</button><button data-floor="3">3</button><button data-floor="4">4</button><button data-floor="5">5</button>
+                  </div>
+                  <div class="control-row door-controls"><button class="secondary-button" data-door="open">Open doors</button><button class="secondary-button" data-door="close">Close doors</button></div>
+                  <div id="elevator-alert" class="elevator-alert hidden"></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel esp-panel">
+              <div class="panel-heading"><div><div class="eyebrow">HARDWARE LINK</div><h3>ESP32 connection</h3></div><span id="latency" class="latency">— ms</span></div>
+              <div class="connection-detail"><span id="connection-indicator" class="large-status-dot disconnected"></span><div><strong id="connection-detail-title">Disconnected</strong><span id="connection-detail-time">No valid update received</span></div></div>
+              <label class="field-label" for="esp32-ip">ESP32 IP ADDRESS</label>
+              <div class="input-row"><input id="esp32-ip" type="text" inputmode="decimal" placeholder="192.168.1.100" autocomplete="off"><button id="save-ip" class="secondary-button">Save IP</button></div>
+              <div class="button-row"><button id="test-connection" class="primary-button">Test ESP32 connection</button><button id="reset-door-count" class="secondary-button">Reset door count</button></div>
+              <p class="panel-hint">PC and ESP32 must be on the same WiFi network. The backend polls <code>/data</code>.</p>
+            </section>
+          </div>
+
+          <section class="panel graph-panel">
+            <div class="panel-heading graph-heading"><div><div class="eyebrow">ROLLING TELEMETRY</div><h3>Live sensor trends</h3></div><span class="graph-window">LAST 60 POINTS</span></div>
+            <div class="chart-grid">
+              <div class="chart-card"><div class="chart-title"><span>Door blocked duration</span><b id="chart-door-current">—</b></div><canvas id="chart-door" aria-label="Door blocked seconds trend"></canvas></div>
+              <div class="chart-card"><div class="chart-title"><span>Car-top clearance</span><b id="chart-distance-current">—</b></div><canvas id="chart-distance" aria-label="Ultrasonic distance trend"></canvas></div>
+              <div class="chart-card"><div class="chart-title"><span>Machine-room temperature</span><b id="chart-temp-current">—</b></div><canvas id="chart-temp" aria-label="Temperature trend"></canvas></div>
+              <div class="chart-card"><div class="chart-title"><span>Machine-room humidity</span><b id="chart-humidity-current">—</b></div><canvas id="chart-humidity" aria-label="Humidity trend"></canvas></div>
+            </div>
+            <p class="data-caption">Live sensor reading (educational prototype). Simulated values are illustrative, not certified elevator limits.</p>
+          </section>
+
+          <div class="dashboard-grid lower-grid">
+            <section class="panel">
+              <div class="panel-heading"><div><div class="eyebrow">ATTENTION REQUIRED</div><h3>Active findings</h3></div><button class="text-button" data-view-link="reports">View reports →</button></div>
+              <div id="active-findings" class="finding-list"><div class="empty-state">No active findings.</div></div>
+            </section>
+            <section class="panel">
+              <div class="panel-heading"><div><div class="eyebrow">SYSTEM ACTIVITY</div><h3>Recent events</h3></div></div>
+              <div id="recent-events" class="event-list"><div class="empty-state">Waiting for system events.</div></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view-panel" id="view-simulation">
+          <div class="section-intro"><div><div class="eyebrow">INTERACTIVE MODEL</div><h2>Elevator simulation</h2><p>Controls affect only this visual simulation. No real elevator is controlled.</p></div></div>
+          <div class="panel simulation-page-panel">
+            <div class="panel-heading"><div><div class="eyebrow">GROUND — FLOOR 5</div><h3>Car movement and door controls</h3></div><span class="simulation-tag">SIMULATION ONLY</span></div>
+            <div class="simulation-large"><div class="shaft-wrap"><div class="shaft">
+              <div class="floor-line floor-5"><span>5</span></div><div class="floor-line floor-4"><span>4</span></div><div class="floor-line floor-3"><span>3</span></div><div class="floor-line floor-2"><span>2</span></div><div class="floor-line floor-1"><span>1</span></div><div class="floor-line floor-0"><span>G</span></div>
+              <div id="elevator-car-large" class="elevator-car"><div class="car-door left"></div><div class="car-door right"></div><span class="car-floor" id="car-floor-large">G</span></div>
+            </div><div class="clearance-meter"><span class="meter-label">CAR TOP<br>CLEARANCE</span><div class="meter-track"><div id="clearance-fill-large" class="meter-fill"></div></div><strong id="clearance-value-large">— cm</strong></div></div>
+              <div class="simulation-action-panel"><div class="status-kicker">CURRENT STATUS</div><strong id="simulation-status-large">Idle</strong><p id="simulation-hint">Select a floor or use the directional controls.</p>
+                <div class="control-row"><button class="control-button" data-move="up">↑ UP</button><button class="control-button" data-move="down">↓ DOWN</button></div>
+                <div class="floor-select-label">FLOOR SELECTION</div><div class="floor-buttons" id="floor-buttons-large"><button data-floor="0">G</button><button data-floor="1">1</button><button data-floor="2">2</button><button data-floor="3">3</button><button data-floor="4">4</button><button data-floor="5">5</button></div>
+                <div class="control-row door-controls"><button class="secondary-button" data-door="open">Open doors</button><button class="secondary-button" data-door="close">Close doors</button></div>
+              </div>
+            </div>
+            <div class="safety-banner"><strong>Educational prototype:</strong> simulated behavior and recommendations are not certified safety limits or authorization to operate or repair equipment.</div>
+          </div>
+        </section>
+
+        <section class="view-panel" id="view-components">
+          <div class="section-intro"><div><div class="eyebrow">10 MONITORED ELEMENTS</div><h2>Component monitoring</h2><p>Thresholds are recalculated from raw sensor values; ESP32 level fields are not trusted.</p></div><div class="legend"><span class="legend-normal">Normal</span><span class="legend-warning">Warning</span><span class="legend-fault">Fault</span><span class="legend-offline">Offline</span></div></div>
+          <div id="component-grid" class="component-grid"><div class="empty-state">Loading component readings…</div></div>
+          <p class="data-caption">Simulated values: illustrative simulated reading, not certified elevator limits. Live values: live sensor reading (educational prototype).</p>
+        </section>
+
+        <section class="view-panel" id="view-injection">
+          <div class="section-intro"><div><div class="eyebrow">CONTROLLED TESTING</div><h2>Fault injection</h2><p>Injection changes simulated readings only and never sends commands to elevator equipment.</p></div></div>
+          <div class="injection-layout">
+            <section class="panel injection-panel"><div class="eyebrow">SIMULATED SCENARIO</div><h3>Inject a component fault</h3>
+              <label class="field-label" for="inject-component">COMPONENT</label><select id="inject-component"><option value="">Loading…</option></select>
+              <label class="field-label" for="inject-fault">FAULT TYPE</label><select id="inject-fault"><option value="">Select a component first</option></select>
+              <button id="inject-button" class="danger-button">Inject simulated fault</button>
+              <div class="injection-actions"><button id="reset-faults" class="secondary-button">Reset all faults</button><button id="normal-simulation" class="secondary-button">Normal simulation</button></div>
+              <div class="safety-banner compact"><strong>Override behavior:</strong> if the selected component normally has a live sensor, the injection is shown as a SIMULATED OVERRIDE; the underlying live reading remains separate.</div>
+            </section>
+            <section class="panel"><div class="panel-heading"><div><div class="eyebrow">SUPPORTED SCENARIOS</div><h3>Fault library</h3></div></div><div id="fault-library" class="fault-library"></div></section>
+          </div>
+        </section>
+
+        <section class="view-panel" id="view-reports">
+          <div class="section-intro"><div><div class="eyebrow">DIAGNOSIS ENGINE</div><h2>Root cause analysis</h2><p>Fault episodes open once, update while active, and resolve when their reading returns to normal.</p></div><div class="button-row report-buttons"><a class="secondary-button link-button" href="/api/report?format=json">Download JSON</a><a class="secondary-button link-button" href="/api/report?format=csv">Download CSV</a></div></div>
+          <div id="report-list" class="report-list"><div class="empty-state">No reports yet.</div></div>
+        </section>
+
+        <section class="view-panel" id="view-history">
+          <div class="section-intro"><div><div class="eyebrow">FAULT EPISODES</div><h2>Fault history</h2><p>Active and resolved episodes, with timestamps and sensor source.</p></div><div class="button-row report-buttons"><a class="secondary-button link-button" href="/api/report?format=json">Download report</a></div></div>
+          <div id="history-list" class="report-list"><div class="empty-state">No fault history yet.</div></div>
+        </section>
+
+        <section class="view-panel" id="view-chatbot">
+          <div class="section-intro"><div><div class="eyebrow">RULE-BASED TECHNICIAN ASSISTANT</div><h2>AI technician chatbot</h2><p>Responses are grounded in the current ESP32 readings, simulation, and diagnosis reports.</p></div></div>
+          <section class="panel chat-page-panel"><div id="chat-messages-page" class="chat-messages chat-large" aria-live="polite"></div><div class="suggested-questions"><button data-question="Which components have faults?">Show active faults</button><button data-question="Why is the elevator not moving?">Why not moving?</button><button data-question="What is the car top clearance?">Car-top clearance</button><button data-question="What is the motor temperature?">Motor temperature</button></div><form id="chat-form-page" class="chat-form"><input id="chat-input-page" type="text" placeholder="Ask about current readings or diagnosis…" maxlength="1000" autocomplete="off"><button type="submit" class="primary-button">Send</button></form></section>
+        </section>
+
+        <footer class="content-footer">Autonomous Fault Isolation and Root Cause Analysis Assistant <span>·</span> Educational prototype, not a certified elevator safety system.</footer>
+      </main>
+    </div>
+
+    <aside class="insight-rail">
+      <section class="rail-section diagnosis-rail"><div class="rail-heading"><span class="rail-icon">✳</span><div><span class="eyebrow">DIAGNOSIS ASSIST</span><h3>Recent diagnosis</h3></div></div><div id="rail-diagnosis" class="rail-diagnosis"><div class="empty-state">No current diagnosis.</div></div><button class="text-button rail-link" data-view-link="reports">Open all reports →</button></section>
+      <section class="rail-section chat-rail"><div class="rail-heading"><span class="rail-icon">⌘</span><div><span class="eyebrow">ASK THE SYSTEM</span><h3>Technician chatbot</h3></div></div><div class="chat-prompt">Answers use current sensor data. Try asking about a component, reading, or root cause.</div><div id="chat-messages" class="chat-messages" aria-live="polite"></div><div class="quick-questions"><button data-question="Which components have faults?">Show active faults</button><button data-question="Is the ESP32 connected?">ESP32 status</button></div><form id="chat-form" class="chat-form"><input id="chat-input" type="text" placeholder="Ask a question…" maxlength="1000" autocomplete="off"><button type="submit" aria-label="Send question">↑</button></form></section>
+      <div class="rail-disclaimer">Diagnostic support only. Never use this prototype to authorize elevator operation or repairs.</div>
+    </aside>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

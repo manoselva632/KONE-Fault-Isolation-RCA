@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KONE SentinIQ | Autonomous Fault Isolation & Root Cause Analysis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+  <!-- Top Bar -->
+  <header class="top-nav">
+    <div class="brand">
+      <div class="logo-mark">
+        <span class="kone-pill">KONE</span>
+        <span class="product-tag">SentinIQ</span>
+      </div>
+      <div class="system-status">
+        <span class="pulse-dot active"></span>
+        <span class="system-label">EDGE CONTROLLER: ONLINE (GW-EU8824)</span>
+      </div>
+    </div>
+
+    <div class="nav-controls">
+      <div class="token-meter">
+        <span class="token-icon">⚡</span>
+        <span class="token-label">Edge Token Budget:</span>
+        <strong id="token-usage-counter">42 / 256 tokens</strong>
+        <span class="badge-eco">Ultra-Low Overhead</span>
+      </div>
+
+      <div class="header-actions">
+        <a href="/" class="btn btn-secondary" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">← RCA Console</a>
+        <button id="btn-export-report" class="btn btn-secondary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Export RCA Dossier
+        </button>
+        <button id="btn-inject-modal" class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Inject Scenario
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Grid Dashboard -->
+  <main class="dashboard-grid">
+    
+    <!-- LEFT PANEL: Digital Twin Hoistway & Live Telemetry -->
+    <section class="panel twin-telemetry-panel">
+      <div class="panel-header">
+        <div class="title-with-badge">
+          <h2>Elevator Hoistway Twin</h2>
+          <span class="unit-code">KONE MonoSpace 700 DX • Car #04</span>
+        </div>
+        <div class="telemetry-speed">
+          <span id="car-motion-state" class="badge-neutral">STATIONARY</span>
+          <span id="car-floor-display" class="badge-floor">FL 07</span>
+        </div>
+      </div>
+
+      <!-- Hoistway Visualizer -->
+      <div class="hoistway-container">
+        <div class="shaft-canvas-wrapper">
+          <div class="shaft-ruler" id="shaft-floors">
+            <!-- Dynamically generated floors 10 to 1 -->
+          </div>
+          <div class="shaft-track">
+            <!-- Hoistway cables -->
+            <div class="hoist-cable left-cable"></div>
+            <div class="hoist-cable right-cable"></div>
+            <!-- Car Body -->
+            <div class="elevator-car" id="elevator-car">
+              <div class="car-header">CAR #04</div>
+              <div class="car-doors">
+                <div class="door door-left" id="door-left"></div>
+                <div class="door door-right" id="door-right"></div>
+              </div>
+              <div class="car-sensors">
+                <span class="sensor-indicator" id="sensor-vibe-dot" title="Traction Frame Vibe"></span>
+                <span class="sensor-indicator" id="sensor-door-dot" title="Door Optical Interlock"></span>
+                <span class="sensor-indicator" id="sensor-level-dot" title="Laser Levelling"></span>
+              </div>
+            </div>
+            <!-- Machine Room / Inverter at Top -->
+            <div class="machine-room-banner">
+              <span>VVVF KDL16S DRIVE & BRAKE MX-18</span>
+              <span class="subsystem-dot normal" id="top-drive-dot"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Telemetry Gauges -->
+        <div class="telemetry-deck">
+          <div class="telemetry-card" id="card-motor-temp">
+            <div class="tele-head">
+              <span>Motor Temp</span>
+              <span class="tele-val" id="val-motor-temp">48.2 °C</span>
+            </div>
+            <div class="tele-bar-track">
+              <div class="tele-bar-fill" id="bar-motor-temp" style="width: 45%;"></div>
+            </div>
+            <div class="tele-meta">Nominal: &lt;70°C | Alert: &gt;85°C</div>
+          </div>
+
+          <div class="telemetry-card" id="card-vibe">
+            <div class="tele-head">
+              <span>Guide Rail FFT Peak</span>
+              <span class="tele-val" id="val-vibe">0.08 g</span>
+            </div>
+            <div class="tele-bar-track">
+              <div class="tele-bar-fill" id="bar-vibe" style="width: 15%;"></div>
+            </div>
+            <div class="tele-meta">ISO 18738 Spec: &lt;0.25 g</div>
+          </div>
+
+          <div class="telemetry-card" id="card-door-current">
+            <div class="tele-head">
+              <span>Door Motor Current</span>
+              <span class="tele-val" id="val-door-current">1.45 A</span>
+            </div>
+            <div class="tele-bar-track">
+              <div class="tele-bar-fill" id="bar-door-current" style="width: 28%;"></div>
+            </div>
+            <div class="tele-meta">Coupler Obstruction &gt;2.80 A</div>
+          </div>
+
+          <div class="telemetry-card" id="card-bus-voltage">
+            <div class="tele-head">
+              <span>DC Bus Ripple & Volt</span>
+              <span class="tele-val" id="val-bus-voltage">565 V</span>
+            </div>
+            <div class="tele-bar-track">
+              <div class="tele-bar-fill" id="bar-bus-voltage" style="width: 75%;"></div>
+            </div>
+            <div class="tele-meta">VVVF Inverter Nominal: 560±15 V</div>
+          </div>
+
+          <div class="telemetry-card" id="card-safety-loop">
+            <div class="tele-head">
+              <span>Safety Chain Loop</span>
+              <span class="tele-val" id="val-safety-loop">CLOSED (OK)</span>
+            </div>
+            <div class="tele-bar-track">
+              <div class="tele-bar-fill" id="bar-safety-loop" style="width: 100%;"></div>
+            </div>
+            <div class="tele-meta">Impedance: 1.2 Ω • 110V DC Line</div>
+          </div>
+
+          <div class="telemetry-card" id="card-level-offset">
+            <div class="tele-head">
+              <span>Sill Levelling Accuracy</span>
+              <span class="tele-val" id="val-level-offset">±1.1 mm</span>
+            </div>
+            <div class="tele-bar-track">
+              <div class="tele-bar-fill" id="bar-level-offset" style="width: 10%;"></div>
+            </div>
+            <div class="tele-meta">EN 81-20 Target: &le; ±4.0 mm</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CENTER & RIGHT: Autonomous Fault Isolation & Causal Graph Engine -->
+    <section class="panel fault-isolation-panel">
+      
+      <!-- Fault Pipeline Status Bar -->
+      <div class="pipeline-header">
+        <div class="pipeline-stages">
+          <div class="stage-step active" id="p-step-1">
+            <span class="num">01</span>
+            <span class="lbl">Anomaly Detection</span>
+          </div>
+          <div class="stage-arrow">→</div>
+          <div class="stage-step" id="p-step-2">
+            <span class="num">02</span>
+            <span class="lbl">Topological Pruning</span>
+          </div>
+          <div class="stage-arrow">→</div>
+          <div class="stage-step" id="p-step-3">
+            <span class="num">03</span>
+            <span class="lbl">Causal Isolation</span>
+          </div>
+          <div class="stage-arrow">→</div>
+          <div class="stage-step" id="p-step-4">
+            <span class="num">04</span>
+            <span class="lbl">Root Cause Synthesis</span>
+          </div>
+        </div>
+
+        <div class="active-incident-tag" id="incident-pill">
+          <span class="status-indicator-dot normal"></span>
+          <span id="incident-name">SYSTEM STATE: HEALTHY</span>
+        </div>
+      </div>
+
+      <!-- Graph & Causal Tree Visualization -->
+      <div class="causal-graph-box">
+        <div class="box-titlebar">
+          <h3>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Subsystem Causal Dependency Graph
+          </h3>
+          <span class="tag-subtle">Isolates cascading symptom propagation to find the real root cause</span>
+        </div>
+        <div class="graph-viewport">
+          <svg id="causal-graph-svg" width="100%" height="230"></svg>
+        </div>
+      </div>
+
+      <!-- RCA Deep-Dive & Action Recommendation -->
+      <div class="rca-output-grid">
+        
+        <!-- Left Sub-card: 5-Whys Autonomous Trace -->
+        <div class="rca-card whys-card">
+          <div class="card-caption">
+            <span class="chip-kone">AUTONOMOUS 5-WHYS</span>
+            <h4>Failure Chain Decomposition</h4>
+          </div>
+          <div class="whys-list" id="whys-container">
+            <div class="empty-state">No anomalies detected. Telemetry streams operating within nominal baseline parameters.</div>
+          </div>
+        </div>
+
+        <!-- Right Sub-card: Prescriptive Dispatch & Low-Token AI Summary -->
+        <div class="rca-card action-card">
+          <div class="card-caption">
+            <span class="chip-accent">DISPATCH ASSISTANT</span>
+            <h4>Prescriptive Action & Parts</h4>
+          </div>
+
+          <div class="action-details" id="action-details-box">
+            <div class="empty-state">System healthy. Standby for IoT edge sensor anomalies.</div>
+          </div>
+
+          <!-- Token-Optimized Edge Payload Preview -->
+          <div class="edge-payload-footer">
+            <div class="payload-header">
+              <span class="micro-label">EDGE-TO-CLOUD TELEMETRY PACKET (COMPACT JSON)</span>
+              <span class="byte-badge" id="packet-bytes">0 bytes</span>
+            </div>
+            <pre class="code-preview" id="compact-json-output">{"status": "NOMINAL", "active_faults": 0}</pre>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Scenario Injection Modal -->
+  <div class="modal-backdrop hidden" id="scenario-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Trigger Autonomous Fault Scenario</h3>
+        <button class="btn-close" id="btn-close-modal">&times;</button>
+      </div>
+      <p class="modal-desc">
+        Select a real-world KONE elevator incident scenario to observe instant autonomous fault isolation, symptom tree pruning, and minimal-token root cause analysis.
+      </p>
+
+      <div class="scenario-list">
+        
+        <div class="scenario-item" data-scenario="SCN-01">
+          <div class="item-badge danger">CRITICAL</div>
+          <div class="item-body">
+            <strong>SCN-01: VVVF Drive Cooling Fan Seizure & Overheating</strong>
+            <p>Cascading fault: Heatsink thermal throttling triggers IGBT switching delay, causing intermittent motor torque dip and safety line interlock tripping.</p>
+          </div>
+          <button class="btn btn-sm btn-outline">Simulate</button>
+        </div>
+
+        <div class="scenario-item" data-scenario="SCN-02">
+          <div class="item-badge warning">HIGH</div>
+          <div class="item-body">
+            <strong>SCN-02: Landing Door Sill Debris & Optical Interlock Chattering</strong>
+            <p>Debris resistance surges door motor current; coupler fails to seat, causing door cycle retries and passenger entrapment prevention hold.</p>
+          </div>
+          <button class="btn btn-sm btn-outline">Simulate</button>
+        </div>
+
+        <div class="scenario-item" data-scenario="SCN-03">
+          <div class="item-badge warning">MEDIUM</div>
+          <div class="item-body">
+            <strong>SCN-03: Traction Brake MX-18 Mechanical Retardation Lag</strong>
+            <p>Residual magnetic stick causes 320ms release delay; levelling offset exceeds ±4mm at Floor 7 during peak traffic.</p>
+          </div>
+          <button class="btn btn-sm btn-outline">Simulate</button>
+        </div>
+
+        <div class="scenario-item" data-scenario="SCN-04">
+          <div class="item-badge info">MAINTENANCE</div>
+          <div class="item-body">
+            <strong>SCN-04: Counterweight Guide Rail Roller Bearing Degradation</strong>
+            <p>Lateral vibration harmonic peak reaches 0.42g at 4.2m/s, creating acoustic flutter and passenger ride comfort degradation.</p>
+          </div>
+          <button class="btn btn-sm btn-outline">Simulate</button>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button id="btn-reset-nominal" class="btn btn-secondary">Reset To Nominal Normal</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

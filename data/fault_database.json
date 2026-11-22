@@ -1,0 +1,334 @@
+{
+  "injection_faults": {
+    "traction_motor": {
+      "overheating": {
+        "label": "Overheating",
+        "reading": 47,
+        "unit": "C",
+        "severity": "CRITICAL",
+        "problem": "Motor temperature is above the illustrative critical threshold.",
+        "root_causes": ["Restricted ventilation", "Excessive duty cycle", "Bearing friction"],
+        "checks": ["Review ventilation and recent operating conditions", "Have a qualified technician inspect bearings and motor condition"]
+      },
+      "abnormal_vibration": {
+        "label": "Abnormal vibration",
+        "reading": "High",
+        "unit": "level",
+        "severity": "WARNING",
+        "problem": "Illustrative vibration indication is abnormal.",
+        "root_causes": ["Mechanical imbalance", "Loose mounting", "Worn bearing"],
+        "checks": ["Record vibration under controlled observation", "Arrange a qualified mechanical inspection"]
+      },
+      "abnormal_current": {
+        "label": "Abnormal current",
+        "reading": 2.8,
+        "unit": "A",
+        "severity": "WARNING",
+        "problem": "Illustrative motor current is outside its expected range.",
+        "root_causes": ["Excessive load", "Electrical connection issue", "Mechanical drag"],
+        "checks": ["Compare with the equipment manufacturer's specification", "Have a qualified technician inspect electrical and mechanical conditions"]
+      },
+      "not_responding": {
+        "label": "Not responding",
+        "reading": "No response",
+        "unit": "state",
+        "severity": "CRITICAL",
+        "problem": "Illustrative motor command has no corresponding response.",
+        "root_causes": ["Power interruption", "Drive fault", "Control signal issue"],
+        "checks": ["Review controller and drive diagnostics", "Do not operate until checked by qualified personnel"]
+      }
+    },
+    "motor_brake": {
+      "feedback_mismatch": {
+        "label": "Feedback mismatch",
+        "reading": "Command != feedback",
+        "unit": "state",
+        "severity": "CRITICAL",
+        "problem": "Illustrative brake command and feedback do not agree.",
+        "root_causes": ["Feedback switch issue", "Brake adjustment issue", "Wiring fault"],
+        "checks": ["Keep this as a simulated finding; request qualified inspection", "Verify feedback against approved service documentation"]
+      },
+      "release_failure": {
+        "label": "Release failure",
+        "reading": "Not released",
+        "unit": "state",
+        "severity": "CRITICAL",
+        "problem": "Illustrative brake release did not occur.",
+        "root_causes": ["Brake coil issue", "Power or wiring issue", "Mechanical binding"],
+        "checks": ["Do not attempt operation based on this prototype", "Arrange inspection by qualified elevator personnel"]
+      },
+      "engagement_fault": {
+        "label": "Engagement fault",
+        "reading": "Not engaged",
+        "unit": "state",
+        "severity": "CRITICAL",
+        "problem": "Illustrative brake engagement feedback is abnormal.",
+        "root_causes": ["Brake mechanism issue", "Feedback sensor fault", "Control output issue"],
+        "checks": ["Treat as a simulated alert only", "Have qualified personnel inspect using approved procedures"]
+      }
+    },
+    "door_motor": {
+      "overload": {
+        "label": "Overload",
+        "reading": 2.1,
+        "unit": "A",
+        "severity": "WARNING",
+        "problem": "Illustrative door-motor current is elevated.",
+        "root_causes": ["Door obstruction", "Increased friction", "Operator adjustment issue"],
+        "checks": ["Check the doorway is clear in the simulation", "Arrange operator inspection if the indication persists"]
+      },
+      "not_opening": {
+        "label": "Not opening",
+        "reading": "No open motion",
+        "unit": "state",
+        "severity": "CRITICAL",
+        "problem": "Illustrative door opening response is missing.",
+        "root_causes": ["Operator fault", "Control signal issue", "Mechanical obstruction"],
+        "checks": ["Inspect the simulated event history", "Request qualified inspection before real-world operation"]
+      },
+      "not_closing": {
+        "label": "Not closing",
+        "reading": "Close timeout",
+        "unit": "state",
+        "severity": "WARNING",
+        "problem": "Illustrative door closing response did not complete.",
+        "root_causes": ["Obstruction", "Door operator friction", "Sensor input remains active"],
+        "checks": ["Review door sensor status and simulated obstruction", "Arrange qualified inspection if persistent"]
+      },
+      "abnormal_operation": {
+        "label": "Abnormal operation",
+        "reading": "Irregular",
+        "unit": "state",
+        "severity": "WARNING",
+        "problem": "Illustrative door operation is irregular.",
+        "root_causes": ["Operator wear", "Intermittent input", "Mechanical resistance"],
+        "checks": ["Review related door sensor events", "Have qualified personnel inspect persistent issues"]
+      }
+    },
+    "door_sensor": {
+      "not_detecting_obstruction": {
+        "label": "Not detecting obstruction",
+        "reading": "No detection",
+        "unit": "state",
+        "severity": "CRITICAL",
+        "problem": "Simulated door sensor failure override.",
+        "root_causes": ["Sensor alignment issue", "Power or wiring issue", "Sensor fault"],
+        "checks": ["This is an injected simulated override, not a live safety test", "Use only approved test procedures with qualified personnel"]
+      },
+      "signal_failure": {
+        "label": "Signal failure",
+        "reading": "No signal",
+        "unit": "state",
+        "severity": "CRITICAL",
+        "problem": "Simulated door sensor signal failure override.",
+        "root_causes": ["Connector issue", "Cable damage", "Sensor electronics fault"],
+        "checks": ["Confirm this is a simulated override in the report", "Arrange a qualified inspection for real equipment"]
+      },
+      "false_detection": {
+        "label": "False detection",
+        "reading": "Blocked while clear",
+        "unit": "state",
+        "severity": "WARNING",
+        "problem": "Simulated door sensor false-detection override.",
+        "root_causes": ["Misalignment", "Electrical interference", "Sensor contamination"],
+        "checks": ["Review live IR state separately from this override", "Check approved installation and cleaning guidance"]
+      }
+    },
+    "limit_switch": {
+      "signal_missing": {
+        "label": "Signal missing",
+        "reading": "No signal",
+        "unit": "state",
+        "severity": "CRITICAL",
+        "problem": "Illustrative limit-switch signal is missing.",
+        "root_causes": ["Switch or wiring fault", "Input circuit issue", "Mechanical actuation issue"],
+        "checks": ["Treat as an educational simulation", "Request qualified inspection before real-world operation"]
+      },
+      "incorrect_position_indication": {
+        "label": "Incorrect position indication",
+        "reading": "Mismatch",
+        "unit": "state",
+        "severity": "WARNING",
+        "problem": "Illustrative limit-switch position disagrees with expected position.",
+        "root_causes": ["Switch adjustment", "Intermittent wiring", "Position feedback issue"],
+        "checks": ["Compare simulated readings with the position sensor", "Arrange qualified inspection if persistent"]
+      }
+    },
+    "position_sensor": {
+      "signal_mismatch": {
+        "label": "Signal mismatch",
+        "reading": "Inconsistent",
+        "unit": "state",
+        "severity": "WARNING",
+        "problem": "Simulated position sensor mismatch override.",
+        "root_causes": ["Sensor alignment", "Interference", "Signal processing issue"],
+        "checks": ["Review live distance separately from this simulated override", "Inspect only under approved service procedures"]
+      },
+      "communication_failure": {
+        "label": "Communication failure",
+        "reading": "No communication",
+        "unit": "state",
+        "severity": "CRITICAL",
+        "problem": "Simulated position sensor communication failure override.",
+        "root_causes": ["Cable or connector issue", "Sensor power issue", "Interface fault"],
+        "checks": ["Confirm the override is simulated", "Arrange qualified inspection for real equipment"]
+      }
+    },
+    "overload_sensor": {
+      "excessive_load": {
+        "label": "Excessive load",
+        "reading": 96,
+        "unit": "%",
+        "severity": "CRITICAL",
+        "problem": "Illustrative load exceeds the configured simulation threshold.",
+        "root_causes": ["Excessive passenger or cargo load", "Load sensor calibration issue"],
+        "checks": ["Do not use this prototype to determine certified capacity", "Compare only with approved equipment specifications"]
+      },
+      "incorrect_weight_reading": {
+        "label": "Incorrect weight reading",
+        "reading": "Unstable",
+        "unit": "state",
+        "severity": "WARNING",
+        "problem": "Illustrative load reading is unstable.",
+        "root_causes": ["Sensor calibration", "Mechanical loading variation", "Wiring noise"],
+        "checks": ["Review trend and simulation history", "Arrange qualified calibration if this were real equipment"]
+      }
+    },
+    "safety_relay": {
+      "feedback_failure": {
+        "label": "Feedback failure",
+        "reading": "No feedback",
+        "unit": "state",
+        "severity": "CRITICAL",
+        "problem": "Illustrative safety relay feedback is missing.",
+        "root_causes": ["Relay fault", "Feedback circuit fault", "Supply issue"],
+        "checks": ["This prototype is not a safety circuit", "Request qualified inspection; do not bypass safety devices"]
+      },
+      "safety_circuit_mismatch": {
+        "label": "Safety circuit mismatch",
+        "reading": "Mismatch",
+        "unit": "state",
+        "severity": "CRITICAL",
+        "problem": "Illustrative safety-circuit feedback is inconsistent.",
+        "root_causes": ["Circuit interruption", "Relay contact issue", "Input wiring fault"],
+        "checks": ["Never use this simulation to authorize operation", "Have qualified personnel inspect approved circuit documentation"]
+      }
+    },
+    "power_supply": {
+      "low_voltage": {
+        "label": "Low voltage",
+        "reading": 18.5,
+        "unit": "V",
+        "severity": "CRITICAL",
+        "problem": "Illustrative supply voltage is below its expected range.",
+        "root_causes": ["Supply degradation", "Loose connection", "Excessive load"],
+        "checks": ["Compare against manufacturer specifications", "Arrange qualified electrical inspection"]
+      },
+      "voltage_fluctuation": {
+        "label": "Voltage fluctuation",
+        "reading": "Unstable",
+        "unit": "state",
+        "severity": "WARNING",
+        "problem": "Illustrative supply voltage is fluctuating.",
+        "root_causes": ["Supply instability", "Connection resistance", "Load variation"],
+        "checks": ["Review the simulated evidence and humidity trend", "Arrange qualified inspection if persistent"]
+      },
+      "power_failure": {
+        "label": "Power failure",
+        "reading": "No output",
+        "unit": "state",
+        "severity": "CRITICAL",
+        "problem": "Illustrative supply output is unavailable.",
+        "root_causes": ["Input supply loss", "Protection trip", "Supply unit fault"],
+        "checks": ["Treat this as a simulation only", "Request qualified electrical inspection"]
+      }
+    },
+    "elevator_controller": {
+      "communication_failure": {
+        "label": "Communication failure",
+        "reading": "No communication",
+        "unit": "state",
+        "severity": "CRITICAL",
+        "problem": "Illustrative controller communication is unavailable.",
+        "root_causes": ["Network or bus issue", "Controller power issue", "Interface fault"],
+        "checks": ["Review simulated communication state", "Arrange qualified diagnosis before any real-world operation"]
+      },
+      "malfunction": {
+        "label": "Malfunction",
+        "reading": "Error state",
+        "unit": "state",
+        "severity": "CRITICAL",
+        "problem": "Illustrative controller is in an error state.",
+        "root_causes": ["Controller hardware issue", "Configuration issue", "Intermittent supply"],
+        "checks": ["Review event chronology", "Use approved service tools and qualified personnel"]
+      },
+      "io_mismatch": {
+        "label": "I/O mismatch",
+        "reading": "Mismatch",
+        "unit": "state",
+        "severity": "WARNING",
+        "problem": "Illustrative controller input and output states disagree.",
+        "root_causes": ["I/O mapping issue", "Wiring mismatch", "Stale input state"],
+        "checks": ["Review simulated I/O evidence", "Verify only against approved project documentation"]
+      }
+    }
+  },
+  "diagnosis_templates": {
+        "sensor_communication": {
+          "root_causes": ["DHT11 sensor, connection, or power issue"],
+          "checks": ["Check sensor wiring and power without connecting to elevator circuits", "Confirm valid readings after the sensor reconnects"]
+        },
+        "motor_overtemperature": {
+          "root_causes": ["Restricted ventilation", "Excessive duty cycle", "Bearing friction"],
+          "checks": ["Review ventilation and recent operating conditions", "Have qualified personnel inspect the motor"]
+        },
+        "motor_temperature_high": {
+          "root_causes": ["Elevated machine-room temperature", "Restricted ventilation", "High duty cycle"],
+          "checks": ["Review the temperature trend and ambient conditions", "Compare with manufacturer limits"]
+        },
+        "door_obstruction_timeout": {
+          "root_causes": ["Doorway obstruction", "Door operator friction", "Door sensor alignment"],
+          "checks": ["Check the doorway and sensor in the educational setup", "Review door-motor evidence"]
+        },
+        "door_obstruction": {
+          "root_causes": ["Temporary obstruction", "Door operator friction", "Sensor alignment"],
+          "checks": ["Observe whether the obstruction clears", "Review door sensor and operator readings"]
+        },
+        "position_no_echo": {
+          "root_causes": ["Ultrasonic sensor wiring or alignment fault", "Target surface outside sensor range", "No echo returned"],
+          "checks": ["Check target distance and sensor alignment in the prototype", "Inspect the sensor connection"]
+        },
+        "position_clearance_critical": {
+          "root_causes": ["Low measured clearance", "Sensor alignment or mounting issue", "Possible overtravel indication"],
+          "checks": ["Stop the simulation and review position evidence", "Do not interpret this prototype as a certified clearance measurement"]
+        },
+        "position_clearance_low": {
+          "root_causes": ["Low measured clearance", "Sensor alignment or mounting issue"],
+          "checks": ["Review the clearance trend and target surface", "Confirm sensor mounting in the prototype"]
+        },
+        "door_motor_current_high": {
+          "root_causes": ["Door obstruction", "Increased operator friction", "Door operator adjustment issue"],
+          "checks": ["Review the simulated door path and obstruction inputs", "Arrange qualified inspection for real equipment"]
+        },
+        "overload_critical": {
+          "root_causes": ["Illustrative simulated load is excessive", "Load input or calibration issue"],
+          "checks": ["Do not use the prototype to establish rated capacity", "Compare only with approved equipment specifications"]
+        },
+        "overload_high": {
+          "root_causes": ["Illustrative simulated load is elevated", "Load input variation"],
+          "checks": ["Review simulated load history", "Do not infer a certified capacity from this value"]
+        },
+        "power_voltage_critical": {
+          "root_causes": ["Illustrative supply outside expected range", "Supply or connection issue"],
+          "checks": ["Treat the value as simulated", "Use qualified electrical inspection and manufacturer specifications"]
+        },
+        "power_voltage_warning": {
+          "root_causes": ["Illustrative supply variation", "Connection or load variation"],
+          "checks": ["Review simulated voltage trend", "Check condensation evidence if live humidity is available"]
+        },
+        "condensation_risk": {
+          "root_causes": ["Elevated machine-room humidity", "Insufficient ventilation", "Condensation conditions"],
+          "checks": ["Review live humidity and temperature trends", "Inspect for condensation only under approved site procedures"]
+        }
+  }
+}
